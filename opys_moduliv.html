@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Детальний опис модулів — Програма курсу</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f7fbfb;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --text: #071226;
+    --accent: #0ea57f;
+    --accent-2: #06a5d8;
+    --glass: rgba(11,18,22,0.06);
+    --radius: 14px;
+    --ease: cubic-bezier(.2,.9,.2,1);
+  }
+  *{ box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body{ margin:0; font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+  .container{ max-width:1200px; margin:36px auto; padding:28px; }
+
+  header.top { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; flex-wrap:wrap; margin-bottom:20px; }
+  .heading { max-width:820px; }
+  h1{ margin:0; font-size:28px; letter-spacing:-0.3px; }
+  p.lead{ margin:8px 0 0; color:var(--muted); font-size:15px; }
+
+  .actions { display:flex; gap:10px; align-items:center; }
+  .btn { display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; background:var(--card); border:1px solid rgba(11,18,22,0.04); cursor:pointer; font-weight:700; color:var(--text); text-decoration:none; box-shadow:0 10px 30px rgba(11,18,22,0.04); }
+  .btn.primary{ background:linear-gradient(180deg,var(--accent),#08a576); color:#fff; border:none; box-shadow:0 14px 36px rgba(14,165,127,0.12); }
+  .btn.ghost{ background:transparent; border:1px dashed rgba(11,18,22,0.06); }
+
+  .toc { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+  .toc a{ padding:8px 12px; background:var(--card); border-radius:10px; color:var(--accent); text-decoration:none; font-weight:700; border:1px solid rgba(14,165,127,0.06); }
+
+  /* overview cards */
+  .overview { display:grid; grid-template-columns: repeat(3,1fr); gap:12px; margin:20px 0; }
+  .ov { background:var(--card); border-radius:12px; padding:12px; box-shadow:0 12px 30px var(--glass); }
+  .ov h3{ margin:0; font-size:15px; }
+  .ov p{ margin:6px 0 0; color:var(--muted); font-size:13px; }
+
+  /* modules list */
+  .modules { display:flex; flex-direction:column; gap:14px; }
+  .module { background:linear-gradient(180deg,var(--card),#fff); border-radius:var(--radius); overflow:hidden; box-shadow:0 18px 48px var(--glass); transition: transform .18s var(--ease), box-shadow .18s var(--ease); }
+  .module:hover{ transform: translateY(-6px); box-shadow:0 30px 80px rgba(11,18,22,0.14); }
+  .module-head { display:flex; align-items:center; justify-content:space-between; padding:18px 20px; cursor:pointer; gap:12px; }
+  .module-left { display:flex; align-items:center; gap:14px; }
+  .badge { background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:white; padding:8px 10px; border-radius:10px; font-weight:800; font-size:13px; box-shadow:0 8px 20px rgba(14,165,127,0.08); }
+  .module-head h2{ margin:0; font-size:16px; font-weight:800; }
+  .meta { color:var(--muted); font-size:13px; white-space:nowrap; }
+
+  /* chevron */
+  .chev { font-size:14px; transition: transform .22s var(--ease); display:inline-block; margin-left:12px; color:var(--muted); }
+  .chev.open { transform: rotate(180deg); color:var(--accent); }
+
+  /* panel */
+  .panel { max-height: 0; overflow: hidden; transition: max-height .42s var(--ease), padding .2s ease; padding:0 20px; }
+  .panel.open { padding:18px 20px 24px; max-height:2000px; } /* big enough */
+
+  .module-body{ color:#334155; font-size:15px; line-height:1.65; }
+  .module-body h3{ margin-top:12px; font-size:15px; }
+  .small{ color:var(--muted); font-size:13px; }
+
+  /* two-column content */
+  .cols { display:grid; grid-template-columns: 1fr 320px; gap:18px; align-items:start; }
+  .sidecard { background:#fbfeff; padding:12px; border-radius:10px; border:1px solid rgba(11,18,22,0.02); box-shadow:0 8px 18px rgba(11,18,22,0.03); }
+  .chip { display:inline-block; background:rgba(14,165,127,0.08); color:var(--accent); padding:6px 8px; border-radius:999px; font-weight:700; font-size:13px; }
+
+  ul.check { margin-left:18px; margin-top:8px; }
+  ol.timetable{ margin-left:18px; margin-top:8px; }
+
+  .resources{ margin-top:12px; display:flex; flex-direction:column; gap:8px; }
+  .resource{ background:white; border-radius:8px; padding:8px 10px; border:1px solid rgba(11,18,22,0.03); display:flex; gap:8px; align-items:center; }
+  .resource a{ color:var(--accent); font-weight:700; text-decoration:none; }
+
+  .examples{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .example-thumb{ width:100%; max-width:260px; border-radius:10px; overflow:hidden; background:#f3faf9; display:block; border:1px solid rgba(11,18,22,0.02); padding:16px; font-size:13px; color:var(--muted); }
+
+  /* rubric table */
+  .rubric{ margin-top:12px; border-radius:10px; overflow:hidden; border:1px solid rgba(11,18,22,0.04); }
+  .rubric-row{ display:grid; grid-template-columns: 200px 1fr; gap:0; padding:12px; align-items:start; background:#fff; border-bottom:1px solid rgba(11,18,22,0.03); }
+  .rubric-row:last-child{ border-bottom:none; }
+  .score{ font-weight:800; color:var(--accent); }
+
+  /* fancy progress */
+  .progress-wrap{ margin-top:12px; display:flex; align-items:center; gap:12px; }
+  .progress { flex:1; height:10px; background:#eef6f3; border-radius:999px; overflow:hidden; }
+  .progress > i { display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0%; transition: width .9s var(--ease); }
+
+  /* footer */
+  footer { margin-top:26px; color:var(--muted); text-align:center; padding:10px 0; }
+
+  /* responsiveness */
+  @media (max-width:1100px){ .overview{ grid-template-columns:repeat(2,1fr);} .cols{ grid-template-columns:1fr; } .module-left h2{ font-size:15px; } }
+  @media (max-width:700px){ .overview{ grid-template-columns:1fr;} header.top{ flex-direction:column; align-items:flex-start; } .meta{ display:none; } }
+
+  /* small entrance fade */
+  .fade-up { opacity:0; transform: translateY(8px); animation:fadeUp .6s ease forwards; }
+  @keyframes fadeUp { to { opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+  <main class="container fade-up" id="main">
+    <header class="top">
+      <div class="heading">
+        <h1>Детальний опис модулів — Програма курсу</h1>
+        <p class="lead">6 модулів. Кожний модуль містить детальний план, практику, rubrics, реальні задачі та шаблони. Тут — повний вичерпний опис, щоб підготуватися до навчання та оцінювання.</p>
+        <div class="toc" aria-label="зміст">
+          <a href="#m1">Модуль 1</a>
+          <a href="#m2">Модуль 2</a>
+          <a href="#m3">Модуль 3</a>
+          <a href="#m4">Модуль 4</a>
+          <a href="#m5">Модуль 5</a>
+          <a href="#m6">Модуль 6</a>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn" href="index.html" title="На головну">← На сайт</a>
+        <button id="expandAll" class="btn primary">Відкрити всі модулі</button>
+      </div>
+    </header>
+
+    <section class="overview">
+      <div class="ov"><h3>Модулів</h3><p>6 — від основ до кар'єри</p></div>
+      <div class="ov"><h3>Практика</h3><p>10 практичних проєктів, mock interviews</p></div>
+      <div class="ov"><h3>Фінал</h3><p>Complete case-study + demo</p></div>
+    </section>
+
+    <section class="modules" id="modules">
+
+      <!-- MODULE 1 -->
+      <article class="module" id="m1" data-mod="1">
+        <div class="module-head" role="button" aria-expanded="false" aria-controls="panel1">
+          <div class="module-left">
+            <div class="badge">Модуль 1</div>
+            <h2>Основи UX: дослідження та структури</h2>
+          </div>
+          <div class="meta">40 год • research • CJM • personas <span class="chev">▾</span></div>
+        </div>
+
+        <div class="panel" id="panel1" aria-hidden="true">
+          <div class="module-body">
+            <div class="cols">
+              <div>
+                <p><strong>Коротко:</strong> цей модуль навчає методам збору даних про користувача, синтезу та формуванню інсайтів, що ляжуть в основу подальших дизайн-рішень. Ви навчитесь проводити інтерв'ю, аналізувати відповіді, будувати personas та customer journey maps (CJM).</p>
+
+                <h3>Покроковий план (по тижнях)</h3>
+                <ol class="timetable">
+                  <li><strong>Тиждень 1:</strong> UX fundamentals, double diamond, research ethics.</li>
+                  <li><strong>Тиждень 2:</strong> Підготовка та проведення інтерв'ю; створення гайдів інтерв'ю.</li>
+                  <li><strong>Тиждень 3:</strong> Синтез: affinity mapping, clustering, insight statements.</li>
+                  <li><strong>Тиждень 4:</strong> Personas, CJM, task flows, presentation of findings.</li>
+                </ol>
+
+                <h3>Практичне завдання</h3>
+                <ul class="check">
+                  <li>Провести 3 інтерв'ю, записати нотатки та короткі транскрипти.</li>
+                  <li>Зробити affinity map і виділити 3 інсайти.</li>
+                  <li>Підготувати 1 persona та CJM з pain/gain та action items.</li>
+                </ul>
+
+                <h3>Learning outcomes</h3>
+                <ul class="check">
+                  <li>Навички проведення qualitative research.</li>
+                  <li>Уміння синтезувати дані в дієві гіпотези.</li>
+                  <li>Підготовка deliverables, придатних для презентації продуктовим командам.</li>
+                </ul>
+
+                <h3>Rubric оцінювання (зразок)</h3>
+                <div class="rubric" aria-hidden="false">
+                  <div class="rubric-row"><div class="small">Research quality</div><div>Interview completeness, quality запитань, depth of probes. <span class="score">0–5</span></div></div>
+                  <div class="rubric-row"><div class="small">Synthesis & insights</div><div>Кількість/якість insights, їх логічність та actionability. <span class="score">0–5</span></div></div>
+                  <div class="rubric-row"><div class="small">Deliverables</div><div>Чіткий CJM, реалізовані recommendations. <span class="score">0–5</span></div></div>
+                </div>
+
+                <h3>Поради від наставника</h3>
+                <ul class="check">
+                  <li>Не намагайтесь охопити все в 1 інтерв'ю — краще глибоко в 3–5.</li>
+                  <li>Пишіть notes у форматі: observation → quote → implication.</li>
+                </ul>
+              </div>
+
+              <aside class="sidecard">
+                <div class="small">Інструменти</div>
+                <div style="margin:10px 0;">
+                  <span class="chip">Miro / FigJam</span><br><br>
+                  <span class="chip">Google Forms</span><br><br>
+                  <span class="chip">Notion</span>
+                </div>
+
+                <div class="small">Приклади (заглушки)</div>
+                <div class="examples">
+                  <div class="example-thumb">Placeholder: CJM image (замініть на <code>&lt;img src=&quot;/path/to/cjm.jpg&quot;&gt;</code>)</div>
+                  <div class="example-thumb">Placeholder: Persona card (замініть на img)</div>
+                </div>
+
+                <div class="resources">
+                  <div class="resource"><div style="width:8px;height:8px;background:var(--accent);border-radius:50%;"></div><a href="https://www.nngroup.com/" target="_blank" rel="noopener"> NNGroup — research articles</a></div>
+                  <div class="resource"><div style="width:8px;height:8px;background:var(--accent-2);border-radius:50%;"></div><a href="https://uxdesign.cc/" target="_blank" rel="noopener"> UX Collective</a></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- MODULE 2 -->
+      <article class="module" id="m2" data-mod="2">
+        <div class="module-head" role="button" aria-expanded="false" aria-controls="panel2">
+          <div class="module-left">
+            <div class="badge">Модуль 2</div>
+            <h2>Interaction Design та Wireframing</h2>
+          </div>
+          <div class="meta">45 год • wireframes • patterns <span class="chev">▾</span></div>
+        </div>
+
+        <div class="panel" id="panel2" aria-hidden="true">
+          <div class="module-body">
+            <div class="cols">
+              <div>
+                <p><strong>Коротко:</strong> тут ми вчимося переводити інсайти в flows і wireframes — від початкового скетчу до mid-fi та handoff'у розробнику.</p>
+
+                <h3>Теми по заняттях</h3>
+                <ol class="timetable">
+                  <li>Sketching & idea exploration (paper first)</li>
+                  <li>Low-fi wireframes: framing and layout</li>
+                  <li>Mid-fi: spacing, alignment, information density</li>
+                  <li>Interaction specs and microcopy</li>
+                </ol>
+
+                <h3>Практика</h3>
+                <p class="small">Завдання: редизайн checkout flow — deliverables: low-fi set, clickable mid-fi прототип, interaction spec (state table).</p>
+
+                <h3>Deliverables checklist</h3>
+                <ul class="check">
+                  <li>Flow diagram (user steps)</li>
+                  <li>Low-fi wireframes for core screens</li>
+                  <li>Mid-fi prototype with basic interactions</li>
+                  <li>Interaction specification: states, errors, success</li>
+                </ul>
+
+                <h3>Кращі практики</h3>
+                <ul class="check">
+                  <li>Починайте з головного сценарію — не всі edge-cases відразу.</li>
+                  <li>Прокручуйте interaction spec: що має відбутися при помилці?</li>
+                </ul>
+              </div>
+
+              <aside class="sidecard">
+                <div class="small">Інструменти & assets</div>
+                <div style="margin:8px 0;">
+                  <span class="chip">Figma</span><br><br>
+                  <span class="chip">ProtoPie (опційно)</span>
+                </div>
+
+                <div class="small">Resources</div>
+                <div class="resources">
+                  <div class="resource"><a href="https://www.smashingmagazine.com/" target="_blank" rel="noopener">Smashing Magazine — interaction</a></div>
+                  <div class="resource"><a href="https://www.nngroup.com/" target="_blank" rel="noopener">NNGroup — interactions</a></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- MODULE 3 -->
+      <article class="module" id="m3" data-mod="3">
+        <div class="module-head" role="button" aria-expanded="false" aria-controls="panel3">
+          <div class="module-left">
+            <div class="badge">Модуль 3</div>
+            <h2>UI: візуальний дизайн та компоненти</h2>
+          </div>
+          <div class="meta">60 год • design system • tokens <span class="chev">▾</span></div>
+        </div>
+
+        <div class="panel" id="panel3" aria-hidden="true">
+          <div class="module-body">
+            <div class="cols">
+              <div>
+                <p><strong>Коротко:</strong> створюємо дизайн-систему: від типографіки до компонентів та документації. У результаті — працююча бібліотека компонентів та guideline для командної роботи.</p>
+
+                <h3>Ключові теми</h3>
+                <ul class="check">
+                  <li>Type scale & hierarchy; responsive typography</li>
+                  <li>Color systems: semantic tokens</li>
+                  <li>Component architecture: atoms -> molecules -> organisms</li>
+                  <li>Design tokens → CSS variables & tokens export</li>
+                </ul>
+
+                <h3>Практика</h3>
+                <p class="small">Deliverable: стилгайд + бібліотека компонентів (12+ компонентів) + usage examples.</p>
+
+                <h3>Rubric</h3>
+                <div class="rubric">
+                  <div class="rubric-row"><div class="small">Consistency</div><div>Відступи/радіуси/тіні однакові. <span class="score">0–5</span></div></div>
+                  <div class="rubric-row"><div class="small">Reusability</div><div>Компоненти використовуються в декількох сценаріях. <span class="score">0–5</span></div></div>
+                  <div class="rubric-row"><div class="small">Accessibility</div><div>Контраст, focus states, keyboard navigation. <span class="score">0–5</span></div></div>
+                </div>
+              </div>
+
+              <aside class="sidecard">
+                <div class="small">Швидкі поради</div>
+                <ul class="check">
+                  <li>Документуйте не тільки вигляд, а й поведінку компоненту.</li>
+                  <li>Створюйте tokens як джерело істини для розробки.</li>
+                </ul>
+
+                <div class="small">Приклади</div>
+                <div class="examples">
+                  <div class="example-thumb">Placeholder: Button states</div>
+                  <div class="example-thumb">Placeholder: Form components</div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- MODULE 4 -->
+      <article class="module" id="m4" data-mod="4">
+        <div class="module-head" role="button" aria-expanded="false" aria-controls="panel4">
+          <div class="module-left">
+            <div class="badge">Модуль 4</div>
+            <h2>Прототипування і тестування</h2>
+          </div>
+          <div class="meta">40 год • testing • prototypes <span class="chev">▾</span></div>
+        </div>
+
+        <div class="panel" id="panel4" aria-hidden="true">
+          <div class="module-body">
+            <div class="cols">
+              <div>
+                <p><strong>Коротко:</strong> навчимо створювати прототипи, проводити користувацьке тестування (moderated / unmoderated), збирати та аналізувати дані, робити пріоритизацію фіксів.</p>
+
+                <h3>Що ви вивчите</h3>
+                <ul class="check">
+                  <li>Види прототипів, інструменти та trade-offs</li>
+                  <li>Планування usability test: tasks, metrics</li>
+                  <li>Moderated vs. unmoderated, recruitment, ethical considerations</li>
+                </ul>
+
+                <h3>Практика</h3>
+                <p class="small">Кожна група проводить 5 moderated tests, готує report з findings, priority fixes та before/after recommendations.</p>
+
+                <h3>Deliverables</h3>
+                <ul class="check">
+                  <li>Test plan & recruitment script</li>
+                  <li>Raw recordings + summary spreadsheet</li>
+                  <li>Priority fixes + rationale</li>
+                </ul>
+              </div>
+
+              <aside class="sidecard">
+                <div class="small">Інструменти</div>
+                <div style="margin:8px 0;">
+                  <span class="chip">Lookback / Maze</span><br><br>
+                  <span class="chip">Figma prototypes</span>
+                </div>
+
+                <div class="small">Resources</div>
+                <div class="resources">
+                  <div class="resource"><a href="https://www.usability.gov/" target="_blank" rel="noopener">Usability.gov</a></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- MODULE 5 -->
+      <article class="module" id="m5" data-mod="5">
+        <div class="module-head" role="button" aria-expanded="false" aria-controls="panel5">
+          <div class="module-left">
+            <div class="badge">Модуль 5</div>
+            <h2>Frontend для дизайнерів</h2>
+          </div>
+          <div class="meta">35 год • HTML/CSS/JS • design→code <span class="chev">▾</span></div>
+        </div>
+
+        <div class="panel" id="panel5" aria-hidden="true">
+          <div class="module-body">
+            <div class="cols">
+              <div>
+                <p><strong>Коротко:</strong> практичні навички перекладу дизайну у валідвний код: семантичний HTML, responsive CSS (Flexbox, Grid), design tokens → CSS variables, невеликі JS-interactions.</p>
+
+                <h3>План</h3>
+                <ol class="timetable">
+                  <li>Semantic HTML & aria basics</li>
+                  <li>CSS layout: Flex & Grid</li>
+                  <li>Responsive patterns & mobile-first</li>
+                  <li>Minimal JS interactions: tabs, modal, form validation</li>
+                </ol>
+
+                <h3>Практика</h3>
+                <p class="small">Ви реалізуєте адаптивну компонент-картку з вкладками та простим JS, підкреслюючи доступність.</p>
+
+                <h3>Deliverables</h3>
+                <ul class="check">
+                  <li>HTML prototype</li>
+                  <li>CSS module з variables</li>
+                  <li>Documentation: how to use component</li>
+                </ul>
+              </div>
+
+              <aside class="sidecard">
+                <div class="small">Ресурси</div>
+                <div class="resources">
+                  <div class="resource"><a href="https://developer.mozilla.org/" target="_blank" rel="noopener">MDN</a></div>
+                  <div class="resource"><a href="https://css-tricks.com/" target="_blank" rel="noopener">CSS-Tricks</a></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- MODULE 6 -->
+      <article class="module" id="m6" data-mod="6">
+        <div class="module-head" role="button" aria-expanded="false" aria-controls="panel6">
+          <div class="module-left">
+            <div class="badge">Модуль 6</div>
+            <h2>Кар'єрна підготовка та проекти</h2>
+          </div>
+          <div class="meta">50 год • portfolio • mock interviews <span class="chev">▾</span></div>
+        </div>
+
+        <div class="panel" id="panel6" aria-hidden="true">
+          <div class="module-body">
+            <div class="cols">
+              <div>
+                <p><strong>Коротко:</strong> підготовка portfolio-ready кейсу, презентація, mock interviews, оптимізація LinkedIn та підготовка до технічних співбесід.</p>
+
+                <h3>Теми</h3>
+                <ul class="check">
+                  <li>Case-study structure: context → process → solution → impact</li>
+                  <li>Storytelling & storyboarding for demo</li>
+                  <li>Mock interviews: portfolio & behavioral questions</li>
+                  <li>LinkedIn, резюме, personal brand</li>
+                </ul>
+
+                <h3>Практика</h3>
+                <p class="small">Фінальний проект: complete case-study + презентація 10–12 хв. Кожен студент проходить mock interview з фідбеком.</p>
+
+                <h3>Checklist</h3>
+                <ul class="check">
+                  <li>Чітко визначена роль у проєкті</li>
+                  <li>Процес документовано з доказами (скріни, метрики)</li>
+                  <li>Опис внеску та impact (числа/результати)</li>
+                </ul>
+
+                <h3>Career kit (deliverables)</h3>
+                <ul class="check">
+                  <li>Готовий case-study для portfolio</li>
+                  <li>Сторінка проекту або презентація</li>
+                  <li>Сценарії для mock-interview</li>
+                </ul>
+              </div>
+
+              <aside class="sidecard">
+                <div class="small">Швидкі поради</div>
+                <ul class="check">
+                  <li>Подавайте результати у вигляді impact: «до» / «після».</li>
+                  <li>Тренуйте презентацію, записуйте на відео — це допомагає в оцінці delivery.</li>
+                </ul>
+
+                <div class="small">Resources</div>
+                <div class="resources">
+                  <div class="resource"><a href="https://www.themuse.com/" target="_blank" rel="noopener">The Muse — career tips</a></div>
+                  <div class="resource"><a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn — optimization</a></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Extras: Templates & interactive snippets -->
+    <section style="margin-top:18px;">
+      <h3 style="margin:0 0 10px 0;">Швидкі шаблони (заглушки)</h3>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button id="downloadInterview" class="btn">Завантажити шаблон інтерв'ю</button>
+        <button id="downloadCJM" class="btn">Завантажити шаблон CJM</button>
+        <button id="viewRubrics" class="btn ghost">Переглянути rubrics</button>
+      </div>
+      <p class="small" style="margin-top:8px;">(Кнопки генерують прості приклади у форматі текстових файлів локально; ти можеш замінити їх на реальні файли або підключити серверні посилання.)</p>
+    </section>
+
+    <footer>
+      <p class="small">Якщо хочеш — я можу згенерувати окремі сторінки для кожного модуля, або підготувати ZIP з шаблонами/чеклістами. Пиши — і зроблю.</p>
+    </footer>
+  </main>
+
+<script>
+  // Simple accordion & interactions
+  (function(){
+    const modules = document.querySelectorAll('.module');
+    modules.forEach(mod => {
+      const head = mod.querySelector('.module-head');
+      const panel = mod.querySelector('.panel');
+      const chev = mod.querySelector('.chev');
+
+      head.addEventListener('click', () => toggle(mod));
+      head.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(mod); } });
+
+      function toggle(el){
+        const panel = el.querySelector('.panel');
+        const head = el.querySelector('.module-head');
+        const chev = el.querySelector('.chev');
+        const isOpen = panel.classList.contains('open');
+        if(!isOpen){
+          panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); head.setAttribute('aria-expanded','true'); chev.classList.add('open');
+          // smooth max-height
+          panel.style.maxHeight = panel.scrollHeight + 40 + 'px';
+        } else {
+          panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); head.setAttribute('aria-expanded','false'); chev.classList.remove('open');
+          panel.style.maxHeight = null;
+        }
+      }
+    });
+
+    // Open/close all
+    const expandBtn = document.getElementById('expandAll');
+    let opened = false;
+    expandBtn.addEventListener('click', () => {
+      opened = !opened;
+      expandBtn.textContent = opened ? 'Закрити всі модулі' : 'Відкрити всі модулі';
+      document.querySelectorAll('.panel').forEach(panel => {
+        const head = panel.previousElementSibling;
+        const chev = head.querySelector('.chev');
+        if(opened){
+          panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); head.setAttribute('aria-expanded','true'); chev.classList.add('open');
+          panel.style.maxHeight = panel.scrollHeight + 40 + 'px';
+        } else {
+          panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); head.setAttribute('aria-expanded','false'); chev.classList.remove('open');
+          panel.style.maxHeight = null;
+        }
+      });
+    });
+
+    // Small helpers: create and download simple templates (text)
+    function downloadText(filename, content){
+      const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+      setTimeout(()=> { URL.revokeObjectURL(url); a.remove(); }, 200);
+    }
+
+    document.getElementById('downloadInterview').addEventListener('click', () => {
+      const template = `Interview guide - Template
+
+Purpose:
+- Goal of interview:
+- Target persona:
+
+Intro:
+- Hello, my name is...
+- Duration: 30-40 min
+- Consent: recording & notes?
+
+Warm-up questions:
+1) Can you tell me about ...?
+2) ...
+
+Main tasks:
+- Ask about typical workflows
+- Probe for pain points, frequency, existing workarounds
+
+Closing:
+- Any final thoughts?
+- Offer follow-up`;
+
+      downloadText('interview-guide.txt', template);
+    });
+
+    document.getElementById('downloadCJM').addEventListener('click', () => {
+      const template = `Customer Journey Map - Template
+
+Persona: [Name, role, goals]
+
+Stages:
+1) Awareness - Touchpoints, user goals, pain points
+2) Consideration - ...
+3) Purchase - ...
+4) Post-purchase - ...
+
+Insights:
+- ...
+Opportunities:
+- ...
+Recommendations:
+- ...`;
+
+      downloadText('cjm-template.txt', template);
+    });
+
+    document.getElementById('viewRubrics').addEventListener('click', () => {
+      const rub = `Rubric example
+
+Research quality: 0-5
+Synthesis & insights: 0-5
+Deliverable clarity: 0-5
+
+Notes:
+- Provide evidence for each score.
+- Include quotes/screenshots where relevant.`;
+      // open in new window
+      const w = window.open('', '_blank');
+      w.document.write('<pre style="white-space:pre-wrap;font-family:Inter,Arial;padding:20px;">' + rub + '</pre>');
+      w.document.title = 'Rubrics - example';
+    });
+
+    // optional: animate progress bars if present
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.progress > i').forEach((el, i) => {
+        setTimeout(()=> { el.style.width = (30 + i*12) + '%'; }, 200 + i*120);
+      });
+    });
+  })();
+</script>
+</body>
+</html>

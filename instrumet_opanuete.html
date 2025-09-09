@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Інструменти — Приклади використання</title>
+  <style>
+    /* ---------- базові стилі ---------- */
+    :root{
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --muted:#64748b;
+      --accent:#10b981;
+      --accent-dark:#0e9a69;
+      --glass: rgba(255,255,255,0.6);
+    }
+    html,body{ height:100%; margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:#0b1220; background:var(--bg); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    a{ color:inherit; text-decoration:none; }
+    .container{ max-width:1200px; margin:0 auto; padding:32px 20px; box-sizing:border-box; }
+
+    /* ---------- заголовок секції ---------- */
+    .section-title{ text-align:left; margin-bottom:18px; }
+    .kicker{ color:var(--muted); font-size:13px; margin-bottom:6px; display:block; }
+    h1{ font-size:28px; margin:4px 0 10px; letter-spacing:-0.02em; }
+    p.lead{ color:var(--muted); margin:0 0 22px; max-width:900px; }
+
+    /* ---------- сітка карток ---------- */
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:20px;
+      align-items:start;
+      margin-bottom:22px;
+    }
+    @media (max-width:1000px){ .cards{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width:580px){ .cards{ grid-template-columns:1fr; } }
+
+    .card {
+      background: var(--card);
+      border-radius:12px;
+      padding:18px;
+      box-shadow: 0 10px 30px rgba(11,18,22,0.05);
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s ease, border-color .18s ease;
+      border:1px solid rgba(11,18,22,0.03);
+      cursor:pointer;
+      overflow:visible;
+      position:relative;
+    }
+
+    /* hover animation: lift + soft shadow + slight tilt */
+    .card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 20px 50px rgba(11,18,22,0.12);
+      border-color: rgba(16,185,129,0.06);
+    }
+
+    /* icon / image block (square) */
+    .card .img-wrap{
+      width:76px;
+      height:76px;
+      min-width:76px;
+      border-radius:10px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg,#fff,#fbfbfb);
+      box-shadow: 0 8px 22px rgba(11,18,22,0.04);
+      transition: transform .36s cubic-bezier(.2,.9,.3,1);
+    }
+    .card:hover .img-wrap{ transform: translateY(-6px) rotate(-1.5deg) scale(1.03); }
+
+    .card img.placeholder {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .card .meta{
+      flex:1 1 auto;
+      min-width:0;
+    }
+    .card .meta h3{ margin:0; font-size:15px; font-weight:700; }
+    .card .meta p{ margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.45; }
+
+    /* subtle accent bar on hover */
+    .card::after{
+      content:"";
+      position:absolute;
+      right:14px;
+      top:12px;
+      width:6px;
+      height:6px;
+      border-radius:2px;
+      background:linear-gradient(180deg,var(--accent),var(--accent-dark));
+      opacity:0;
+      transform: translateY(4px) scale(.8);
+      transition: opacity .22s ease, transform .22s ease;
+    }
+    .card:hover::after{ opacity:1; transform: translateY(0) scale(1); }
+
+    /* ---------- CTA button ---------- */
+    .cta-row{ margin-top:12px; }
+    .btn-primary{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 18px;
+      background:var(--card);
+      border-radius:10px;
+      border:1px solid rgba(11,18,22,0.06);
+      box-shadow: 0 12px 32px rgba(11,18,22,0.04);
+      cursor:pointer;
+      font-weight:600;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+    .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 18px 44px rgba(11,18,22,0.08); }
+    .btn-cta {
+      background:linear-gradient(180deg,var(--accent),var(--accent-dark));
+      color:white;
+      border:none;
+      padding:12px 18px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 14px 38px rgba(16,185,129,0.12);
+    }
+    .btn-cta:hover{ filter:brightness(.98); transform:translateY(-2px); }
+
+    /* ---------- modal / details panel ---------- */
+    .modal {
+      position: fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:1200;
+    }
+    .modal.show { display:flex; }
+    .modal .overlay{
+      position:absolute; inset:0; background: rgba(5,10,15,0.48); backdrop-filter: blur(4px);
+    }
+    .modal .dialog{
+      position:relative;
+      max-width:1100px; width:min(96%,1100px);
+      background:linear-gradient(180deg,#fff,#fafafa);
+      border-radius:12px;
+      padding:20px;
+      box-shadow:0 40px 120px rgba(2,6,23,0.3);
+      z-index:2;
+      max-height:90vh;
+      overflow:auto;
+    }
+    .dialog .head{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;}
+    .dialog h3{ margin:0; font-size:20px; }
+    .dialog .close{ background:none;border:0;font-size:18px;cursor:pointer;color:var(--muted); }
+
+    /* lesson list */
+    .lessons{
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:18px;
+    }
+    @media (max-width:980px){ .lessons{ grid-template-columns: 1fr; } }
+
+    .lesson-list{ display:flex; flex-direction:column; gap:12px; }
+    .lesson {
+      background: #fff;
+      border-radius:10px;
+      padding:12px;
+      border:1px solid rgba(11,18,22,0.04);
+      display:flex; gap:12px; align-items:flex-start;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .lesson:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(11,18,22,0.06); }
+    .lesson .thumb { width:86px; height:64px; border-radius:8px; overflow:hidden; background:#f3f6f8; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .lesson h4{ margin:0; font-size:15px; }
+    .lesson p{ margin:6px 0 0; color:var(--muted); font-size:13px; }
+
+    .resources {
+      background: #fff;
+      border-radius:10px;
+      padding:14px;
+      border:1px solid rgba(11,18,22,0.04);
+    }
+    .resources h4{ margin:0 0 10px; }
+    .resource-link { display:block; padding:8px 10px; border-radius:8px; margin-bottom:8px; border:1px solid rgba(11,18,22,0.03); background:#fbfbfb; color:#0b1220; text-decoration:none; }
+    .resource-link small{ display:block; color:var(--muted); font-size:12px; }
+
+    /* small helpers */
+    .muted{ color:var(--muted); font-size:13px; }
+    .spacer{ height:18px; }
+
+    /* give focus styles */
+    .card:focus, .btn-primary:focus, .btn-cta:focus, .resource-link:focus, .lesson:focus { outline:3px solid rgba(16,185,129,0.12); outline-offset:4px; }
+  </style>
+</head>
+<body>
+
+  <main class="container" id="main">
+    <!-- SECTION HEADER -->
+    <section id="tekhnologii" aria-labelledby="tekhnologii-title">
+      <div class="section-title">
+        <span class="kicker">Інструменти, які ви опануєте</span>
+        <h1 id="tekhnologii-title">Інструменти, які ви опануєте</h1>
+        <p class="lead">Практичні навички з інструментів індустрії, які використовуються у реальних проєктах. Кожна картка — короткий опис, а всередині модалки — детальні приклади використання, вправи та навчальні ресурси.</p>
+      </div>
+
+      <!-- CARDS GRID -->
+      <div class="cards" role="list" aria-label="Інструменти">
+        <!-- Figma -->
+        <button class="card tech-card" data-tool="figma" aria-labelledby="figma-title" title="Figma — приклади">
+          <span class="img-wrap" aria-hidden="true">
+            <!-- inline SVG placeholder (replace with your img src if needed) -->
+            <img class="placeholder" src="data:image/svg+xml;utf8,
+              <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>
+                <rect width='100%' height='100%' rx='10' fill='%23F3FAF7'/>
+                <text x='50%' y='50%' font-family='Inter, Arial' font-size='12' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>Figma</text>
+              </svg>">
+          </span>
+          <span class="meta">
+            <h3 id="figma-title">Figma</h3>
+            <p>Дизайн інтерфейсів та прототипування — practical. (Заглушка зображення: замініть <code>src</code> на ваш логотип)</p>
+          </span>
+        </button>
+
+        <!-- Miro -->
+        <button class="card tech-card" data-tool="miro" aria-labelledby="miro-title" title="Miro — приклади">
+          <span class="img-wrap" aria-hidden="true">
+            <img class="placeholder" src="data:image/svg+xml;utf8,
+              <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>
+                <rect width='100%' height='100%' rx='10' fill='%23FFF5D6'/>
+                <text x='50%' y='50%' font-family='Inter, Arial' font-size='12' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>Miro / FigJam</text>
+              </svg>">
+          </span>
+          <span class="meta">
+            <h3 id="miro-title">Miro / FigJam</h3>
+            <p>Колаборативний воркшоп, карти користувача та спринти — intro / practical.</p>
+          </span>
+        </button>
+
+        <!-- Notion -->
+        <button class="card tech-card" data-tool="notion" aria-labelledby="notion-title" title="Notion — приклади">
+          <span class="img-wrap" aria-hidden="true">
+            <img class="placeholder" src="data:image/svg+xml;utf8,
+              <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>
+                <rect width='100%' height='100%' rx='10' fill='%23EAF1FB'/>
+                <text x='50%' y='50%' font-family='Inter, Arial' font-size='12' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>Notion</text>
+              </svg>">
+          </span>
+          <span class="meta">
+            <h3 id="notion-title">Notion</h3>
+            <p>Документація проекту, roadmap, handoffs — practical. (замініть заглушку зображення своїм логотипом)</p>
+          </span>
+        </button>
+
+        <!-- HTML/CSS/JS -->
+        <button class="card tech-card" data-tool="web" aria-labelledby="web-title" title="HTML/CSS/JS — приклади">
+          <span class="img-wrap" aria-hidden="true">
+            <img class="placeholder" src="data:image/svg+xml;utf8,
+              <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>
+                <rect width='100%' height='100%' rx='10' fill='%23EAFBF8'/>
+                <text x='50%' y='50%' font-family='Inter, Arial' font-size='12' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>HTML / CSS / JS</text>
+              </svg>">
+          </span>
+          <span class="meta">
+            <h3 id="web-title">HTML / CSS / JS</h3>
+            <p>Від дизайн-систем до прототипів та production-інтерфейсів — practical / advanced.</p>
+          </span>
+        </button>
+
+        <!-- Optional: ще одна картка (можеш додати/скопіювати) -->
+        <button class="card tech-card" data-tool="other" aria-labelledby="other-title" title="Інші інструменти">
+          <span class="img-wrap" aria-hidden="true">
+            <img class="placeholder" src="data:image/svg+xml;utf8,
+              <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>
+                <rect width='100%' height='100%' rx='10' fill='%23FFF9F0'/>
+                <text x='50%' y='50%' font-family='Inter, Arial' font-size='12' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>Інше</text>
+              </svg>">
+          </span>
+          <span class="meta">
+            <h3 id="other-title">Додатково</h3>
+            <p>Git, Figma Plugins, Design Systems, Accessibility — корисні доповнення до вашої практики.</p>
+          </span>
+        </button>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-row">
+        <button id="open-details" class="btn-cta" aria-haspopup="dialog" aria-controls="details-modal">Переглянути приклад використання</button>
+      </div>
+    </section>
+
+    <div class="spacer"></div>
+
+  </main>
+
+  <!-- MODAL: деталі та уроки -->
+  <div id="details-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="overlay" data-close></div>
+    <div class="dialog" role="document">
+      <div class="head">
+        <h3 id="modal-title">Приклади використання — технології</h3>
+        <button class="close" id="modal-close" aria-label="Закрити">✕</button>
+      </div>
+
+      <p class="muted">Тут зібрані навчальні приклади, поетапні вправи та корисні ресурси для кожного інструменту. Заглушки фото — замінюй на свої зображення у директорії <code>/images/</code>.</p>
+
+      <div class="lessons" style="margin-top:16px;">
+        <!-- left: lessons -->
+        <div class="lesson-list" id="lesson-list">
+          <!-- Figma lessons -->
+          <div class="lesson" data-tool="figma-lesson">
+            <div class="thumb"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><rect rx='8' width='100%' height='100%' fill='%23F3FAF7'/><text x='50%' y='50%' font-family='Inter' font-size='14' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>Figma — Wireframes</text></svg>" alt=""></div>
+            <div>
+              <h4>Figma — швидкий воркфлоу: від вайрфрейму до прототипу</h4>
+              <p class="muted">1. Створення структури сторінки → 2. Атоми/компоненти → 3. Прототипування та інтерактивність → 4. Передача в розробку.</p>
+            </div>
+          </div>
+
+          <div class="lesson" data-tool="miro-lesson">
+            <div class="thumb"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><rect rx='8' width='100%' height='100%' fill='%23FFF5D6'/><text x='50%' y='50%' font-family='Inter' font-size='14' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>Miro — Customer Journey</text></svg>" alt=""></div>
+            <div>
+              <h4>Miro / FigJam — воркшоп та карта користувача</h4>
+              <p class="muted">Приклад сесії: збір потреб користувачів → картування шляхів → постановка гіпотез для A/B тестів.</p>
+            </div>
+          </div>
+
+          <div class="lesson" data-tool="notion-lesson">
+            <div class="thumb"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><rect rx='8' width='100%' height='100%' fill='%23EAF1FB'/><text x='50%' y='50%' font-family='Inter' font-size='14' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>Notion — Docs</text></svg>" alt=""></div>
+            <div>
+              <h4>Notion — організація проектної документації</h4>
+              <p class="muted">Створюємо шаблон для продуктового беклогу, дизайн-система page, та template для handoffs.</p>
+            </div>
+          </div>
+
+          <div class="lesson" data-tool="web-lesson">
+            <div class="thumb"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><rect rx='8' width='100%' height='100%' fill='%23EAFBF8'/><text x='50%' y='50%' font-family='Inter' font-size='14' fill='%2397A1A0' text-anchor='middle' dominant-baseline='middle'>HTML/CSS/JS — From Design to Code</text></svg>" alt=""></div>
+            <div>
+              <h4>HTML / CSS / JS — від дизайну до реалізації</h4>
+              <p class="muted">Практика: адаптивна сітка → компонентні стилі → прості анімації → підключення простого бекенду (fetch).</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- right: resources -->
+        <aside class="resources" aria-label="Ресурси та посилання">
+          <h4>Ресурси та приклади</h4>
+
+          <!-- NOTE: заміни href на свої у разі потреби -->
+          <a class="resource-link" href="https://developer.mozilla.org/uk/docs/Learn" target="_blank" rel="noopener">MDN — Курси по HTML/CSS/JS
+            <small>Великий офіційний ресурс по web-розробці (документація та інтерактивні туторіали)</small>
+          </a>
+
+          <a class="resource-link" href="https://www.figma.com/resources/learn-design/" target="_blank" rel="noopener">Figma — Learn Design
+            <small>Офіційні гайди і кейси — починаємо з дизайну інтерфейсів</small>
+          </a>
+
+          <a class="resource-link" href="https://miro.com/learn/" target="_blank" rel="noopener">Miro — Learning Center
+            <small>Воркшопи, шаблони та реальні приклади командної роботи</small>
+          </a>
+
+          <a class="resource-link" href="https://www.notion.so/help" target="_blank" rel="noopener">Notion — Guides
+            <small>Приклади шаблонів документів та кращі практики</small>
+          </a>
+
+          <div style="margin-top:12px;">
+            <button id="download-sample" class="btn-primary" title="Завантажити пакет матеріалів (заглушка)">Завантажити пакет прикладів</button>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- simple interaction: open modal / show tool-specific lessons ----------
+    (function(){
+      const modal = document.getElementById('details-modal');
+      const openBtn = document.getElementById('open-details');
+      const closeBtn = document.getElementById('modal-close');
+      const overlay = modal.querySelector('.overlay');
+      const lessonList = document.getElementById('lesson-list');
+
+      // open modal
+      function openModal(){
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        // focus first heading inside modal
+        setTimeout(()=> modal.querySelector('.dialog h3').focus(), 50);
+      }
+      function closeModal(){
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+
+      openBtn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+      });
+
+      // Clicking on a tech card filters/highlights lessons (optional nice-to-have)
+      document.querySelectorAll('.tech-card').forEach(btn=>{
+        btn.addEventListener('click', (ev)=>{
+          const tool = btn.dataset.tool;
+          // if a single-button-only behavior desired: just open modal
+          openModal();
+          // visually scroll to relevant lesson (if exists)
+          const lesson = lessonList.querySelector(`[data-tool^="${tool}"]`);
+          if(lesson){
+            lesson.scrollIntoView({behavior:'smooth', block:'center'});
+            // highlight briefly
+            lesson.animate([{ boxShadow: '0 0 0 rgba(16,185,129,0)' }, { boxShadow: '0 18px 40px rgba(16,185,129,0.14)' }, { boxShadow: '0 0 0 rgba(16,185,129,0)' }], { duration:900 });
+          }
+        });
+      });
+
+      // sample download button (just demo); replace with real file link as needed
+      document.getElementById('download-sample').addEventListener('click', function(){
+        // create a small generated text file as example
+        const content = [
+          'Sample package for "Інструменти"',
+          '',
+          '1) Figma — wireframe starter.fig (замініть в реальності)',
+          '2) Miro — workshop-template (замініть в реальності)',
+          '3) Notion — docs-template (замініть в реальності)',
+          '',
+          'Replace these with real assets in your /assets/ folder.'
+        ].join('\\n');
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'instruments-sample.txt';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      // progressive enhancement: keyboard accessible card activation
+      document.querySelectorAll('.card').forEach(c=>{
+        c.addEventListener('keydown', (e)=> {
+          if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); c.click(); }
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>

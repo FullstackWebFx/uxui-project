@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Отримати програму курсу UX/UI — Повна програма | UX/UI Pro</title>
+  <meta name="description" content="Отримайте повну програму курсу UX/UI: 6 місяців, 10 практичних проєктів, live-сесії + записи, менторські рев'ю і career support. Завантажте PDF або замовте консультацію." />
+  <meta property="og:title" content="Отримати програму курсу UX/UI — Повна програма" />
+  <meta property="og:description" content="6 міс • 10 практичних проєктів • Live-сесії + записи • Портфоліо → Працевлаштування" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Fonts & libs -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/focus-trap@6.10.2/dist/focus-trap.umd.js"></script>
+
+  <!-- Structured data: Course + FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Course",
+    "name":"UX/UI інтенсив — Портфоліо → Працевлаштування",
+    "description":"6 місяців практики: research, prototyping, UI, accessibility, career support. Готове портфоліо та менторські рев'ю.",
+    "provider":{"@type":"Organization","name":"UX/UI Pro","url":"https://your-site.example"}
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"Хто підходить для курсу?","acceptedAnswer":{"@type":"Answer","text":"Курс підходить початківцям із базовими знаннями та досвідченим дизайнерам, які хочуть систематизувати навички й отримати портфоліо."}},
+      {"@type":"Question","name":"Який формат занять?","acceptedAnswer":{"@type":"Answer","text":"Live-сесії двічі на тиждень + записи, mentor hours, peer-review та практичні дедлайни."}},
+      {"@type":"Question","name":"Чи є гарантія працевлаштування?","acceptedAnswer":{"@type":"Answer","text":"Ми надаємо career support, mock-interviews та direct-hire можливості з партнерами. Показники hire-rate публічні."}}
+    ]
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#071426;
+      --muted:#6b7280;
+      --green-500:#12b76a;
+      --green-600:#0ea35b;
+      --card:#f8fbfa;
+      --radius:14px;
+    }
+    html,body{height:100%}
+    body{
+      font-family:Inter,ui-sans-serif,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale; line-height:1.5;
+      margin:0;
+    }
+
+    /* Page container */
+    .wrap{max-width:1200px;margin:0 auto;padding:40px 20px}
+    header.site-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #eef3f5}
+    .logo{font-weight:800;color:var(--text);font-size:18px}
+    h1{font-size:44px;line-height:1.02;font-weight:800;margin:10px 0}
+    .subtitle{color:var(--muted);font-size:16px;margin-bottom:18px}
+
+    /* CTA buttons */
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:12px;
+      font-weight:700;background:linear-gradient(180deg,var(--green-500),var(--green-600));
+      color:white;border:0;cursor:pointer;box-shadow:0 18px 30px rgba(18,183,106,0.12);
+      transition:transform .12s ease,box-shadow .12s ease;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.ghost{
+      background:#fff;color:var(--green-600);border:1px solid #e6f6ee;box-shadow:none;font-weight:700;padding:12px 16px;
+    }
+
+    /* Cards & grids */
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(8,20,35,0.04)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    @media (max-width:1024px){ .grid-3{grid-template-columns:1fr} .grid-2{grid-template-columns:1fr} h1{font-size:36px} }
+
+    /* Hero visuals */
+    .hero-media{height:220px;border-radius:12px;background:linear-gradient(180deg,#f6fff7,#ffffff);display:flex;align-items:center;justify-content:center;color:rgba(3,105,72,0.14);font-weight:700}
+
+    /* Form */
+    form{margin-top:12px}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #e7f2ec;background:#fff;font-size:15px}
+    .row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:700px){ .row-2{grid-template-columns:1fr} }
+
+    /* FAQ */
+    .faq-item{border-radius:10px;padding:14px;border:1px solid #eef4f7;margin-bottom:12px}
+    .faq-q{display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:700}
+    .faq-a{margin-top:10px;color:var(--muted);line-height:1.45}
+
+    /* sticky mobile CTA */
+    .mobile-cta{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;border-radius:14px;padding:12px;background:linear-gradient(90deg,var(--green-500),var(--green-600));color:#fff;display:none;box-shadow:0 20px 40px rgba(18,183,106,0.12)}
+    .mobile-cta.show{display:block}
+
+    footer{background:#071426;color:#cfe7ff;padding:40px 20px;margin-top:40px;border-top:1px solid rgba(255,255,255,0.04)}
+    footer a{color:#d8f7e9}
+    small{color:var(--muted)}
+  </style>
+</head>
+<body>
+
+  <header class="site-header wrap" role="banner">
+    <div class="logo">UX/UI Pro — Інтенсив</div>
+    <nav aria-label="Головна навігація">
+      <button class="btn" id="topSignupBtn" aria-controls="signup" aria-haspopup="dialog">Отримати програму</button>
+    </nav>
+  </header>
+
+  <main class="wrap" id="content">
+
+    <!-- HERO -->
+    <section id="hero" aria-labelledby="heroTitle" class="mb-8">
+      <p class="badge" style="display:inline-block;padding:6px 12px;border-radius:999px;background:#f0fdf6;color:var(--green-600);font-weight:700;margin-bottom:12px">Outcome-driven • Portfolio → Hire</p>
+      <h1 id="heroTitle">Отримати програму курсу UX/UI — повна програма та план вступу</h1>
+      <p class="subtitle">6 місяців інтенсиву • 10 практичних проєктів • Live-сесії + записи • Менторські рев'ю та career support</p>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px">
+        <!-- direct download fallback link for no-JS users -->
+        <a class="btn" href="/assets/pdf/syllabus.pdf" download id="downloadPdfLink" role="button" aria-label="Завантажити програму (PDF)">Завантажити програму (PDF)</a>
+        <button class="btn ghost" id="openFormBtn" aria-controls="signup" aria-haspopup="dialog">Записатися / Отримати програму</button>
+      </div>
+
+      <div class="hero-media card" aria-hidden="true">
+        HERO MEDIA — Прев'ю програми (зображення / ілюстрація)
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+        <div class="card" style="padding:10px 12px">6 міс</div>
+        <div class="card" style="padding:10px 12px">10 практичних проєктів</div>
+        <div class="card" style="padding:10px 12px">Live + записи • 1:1 рев'ю</div>
+      </div>
+    </section>
+
+    <!-- MINI-OVERVIEW -->
+    <section id="overview" class="mb-8 grid-2" aria-labelledby="overviewHeading">
+      <div class="card">
+        <h2 id="overviewHeading" style="font-size:20px">Короткий огляд — що входитиме</h2>
+        <p class="subtitle">Повністю практичний інтенсив з високою віддачею: від дослідження до delivery та працевлаштування.</p>
+
+        <ul style="list-style:disc;padding-left:18px;margin-top:12px">
+          <li><strong>Практика:</strong> 10 комплексних проєктів (mobile, web, SaaS, e-commerce).</li>
+          <li><strong>Менторство:</strong> регулярні рев'ю 1:1, mock-interviews з hiring managers.</li>
+          <li><strong>Технології:</strong> Figma, Miro, Notion, HTML/CSS прототипи, accessibility.</li>
+          <li><strong>Career:</strong> CV clinics, direct-hire days, partner introductions.</li>
+          <li><strong>Результат:</strong> 3–4 case-study в портфоліо, готові історії для співбесід.</li>
+        </ul>
+
+        <div style="margin-top:14px;display:flex;gap:10px">
+          <a href="/assets/pdf/syllabus.pdf" download class="btn">Завантажити програму (PDF)</a>
+          <button class="btn ghost" id="viewSyllabusBtn">Переглянути програму онлайн</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:18px">Швидкі метрики</h3>
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <div style="flex:1" class="card"><strong style="font-size:20px">+500</strong><div style="color:var(--muted)">випускників</div></div>
+          <div style="flex:1" class="card"><strong style="font-size:20px">78%</strong><div style="color:var(--muted)">hire rate (3 міс.)</div></div>
+          <div style="flex:1" class="card"><strong style="font-size:20px">10</strong><div style="color:var(--muted)">практичних проєктів</div></div>
+        </div>
+        <p style="color:var(--muted);margin-top:12px">Показники оновлюються щоквартально. Ми фокусуємося на результаті — офері та реальних метриках.</p>
+      </div>
+    </section>
+
+    <!-- MODULES (mini) -->
+    <section id="modules" class="mb-8">
+      <h2 style="font-size:22px">Модулі курсу — overview</h2>
+      <p class="subtitle">6 модулів: research, interaction design, UI, prototyping, frontend basics, career & projects.</p>
+
+      <div class="card" style="margin-top:12px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="card"><strong>Модуль 1 — Research & Strategy</strong><p style="color:var(--muted)">Методи інтерв'ю, аналіз метрик, формування hypothesis.</p></div>
+          <div class="card"><strong>Модуль 2 — Interaction Design</strong><p style="color:var(--muted)">Flows, wireframes, accessibility-first підхід.</p></div>
+          <div class="card"><strong>Модуль 3 — UI & Design Systems</strong><p style="color:var(--muted)">Visual language, components, tokens.</p></div>
+          <div class="card"><strong>Модуль 4 — Prototyping & Testing</strong><p style="color:var(--muted)">Hi-fi прототипи, usability testing, synthesis.</p></div>
+          <div class="card"><strong>Модуль 5 — Frontend for Designers</strong><p style="color:var(--muted)">Design-to-code, basics HTML/CSS/JS, components.</p></div>
+          <div class="card"><strong>Модуль 6 — Career Track</strong><p style="color:var(--muted)">CV clinics, mock interviews, direct-hire days.</p></div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:10px">
+          <a class="btn" href="/assets/pdf/syllabus.pdf" download>Завантажити детальний syllabus (PDF)</a>
+          <a class="btn ghost" href="#signup">Записатися на програму</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXAMPLE ASSIGNMENT / CASE PREVIEW -->
+    <section id="case-preview" class="mb-8 grid-3" aria-labelledby="caseHeading">
+      <h2 id="caseHeading" style="font-size:22px;grid-column:1/-1">Приклад ДЗ — Mobile app redesign (preview)</h2>
+
+      <article class="card">
+        <div class="hero-media" aria-hidden="true">[Preview: wireframe → hi-fi]</div>
+        <h3 style="margin-top:12px">Завдання</h3>
+        <p style="color:var(--muted)">Research → flows → hi-fi prototype. Deliverables: research report, flows, screens, prototype, case-study.</p>
+        <p style="font-weight:700;margin-top:8px">Мета: підвищити конверсію у фуд-доставці на етапі checkout.</p>
+        <a class="btn ghost" href="#" aria-label="Переглянути повний кейс">Переглянути кейс</a>
+      </article>
+
+      <article class="card">
+        <div class="hero-media" aria-hidden="true">[Deliverables]</div>
+        <h3 style="margin-top:12px">Deliverables</h3>
+        <ul style="color:var(--muted);padding-left:18px">
+          <li>Research summary</li>
+          <li>Flows & wireframes</li>
+          <li>Hi-fi screens + prototype</li>
+          <li>Case-study PDF</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="hero-media" aria-hidden="true">[Result metrics]</div>
+        <h3 style="margin-top:12px">Результат</h3>
+        <p style="color:var(--muted)">Пілотний редизайн: +24% конверсії на чек-ауті (A/B), краща retention на 7 днів.</p>
+      </article>
+    </section>
+
+    <!-- TRUST / PARTNERS & TESTIMONIAL -->
+    <section id="trust" class="mb-8 card">
+      <h2 style="font-size:22px">Партнери & результати</h2>
+      <p class="subtitle">Партнери, які брали участь у hiring-days та direct-hire програмах.</p>
+
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <img src="/assets/img/partner-a.svg" alt="Partner A logo" style="height:36px">
+        <img src="/assets/img/partner-b.svg" alt="Partner B logo" style="height:36px">
+        <img src="/assets/img/partner-c.svg" alt="Partner C logo" style="height:36px">
+        <div style="margin-left:auto;font-weight:800;color:var(--green-600)">Hire rate: <span style="color:var(--green-500)">78%</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+        <blockquote class="card" style="font-style:italic">«Курс дав мені структуру та реальні кейси — офер отримала через 2 місяці після завершення.» — Олена, Product Designer</blockquote>
+        <blockquote class="card" style="font-style:italic">«Менторські рев'ю дали потрібний рівень глибини — portfolio-ready screens на результат.» — Роман, UX/UI</blockquote>
+      </div>
+    </section>
+
+    <!-- WHAT YOU GET -->
+    <section id="benefits" class="mb-8">
+      <h2 style="font-size:22px">Що ви отримаєте</h2>
+      <div class="grid-3" style="margin-top:12px">
+        <div class="card"><h3>Портфоліо, що продає</h3><p style="color:var(--muted)">3–4 case-study з вимірюваними результатами.</p></div>
+        <div class="card"><h3>Персональні рев'ю</h3><p style="color:var(--muted)">1:1 сесії, action-plan після кожного рев'ю.</p></div>
+        <div class="card"><h3>Mock-interviews</h3><p style="color:var(--muted)">Практика з hiring managers та розбір відповідей.</p></div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="mb-8 card" aria-labelledby="faqTitle">
+      <h2 id="faqTitle" style="font-size:22px">Питання й відповіді</h2>
+
+      <div style="margin-top:12px">
+        <div class="faq-item" id="faq1">
+          <div class="faq-q" tabindex="0" aria-expanded="false">1. Хто підходить для курсу?<span aria-hidden="true">+</span></div>
+          <div class="faq-a" hidden>Початківці з базою та mid-designer, які хочуть систематизувати та вивести навички на product-level.</div>
+        </div>
+
+        <div class="faq-item" id="faq2">
+          <div class="faq-q" tabindex="0" aria-expanded="false">2. Який формат і графік занять?<span aria-hidden="true">+</span></div>
+          <div class="faq-a" hidden>Live-сесії двічі на тиждень, записи доступні 24/7, щотижневі дедлайни, mentor hours.</div>
+        </div>
+
+        <div class="faq-item" id="faq3">
+          <div class="faq-q" tabindex="0" aria-expanded="false">3. Як отримати сертифікат і що потрібно для нього?<span aria-hidden="true">+</span></div>
+          <div class="faq-a" hidden>Сертифікат видається після проходження курс-рубрік, виконання підсумкових завдань і mentor sign-off.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIGNUP / LEAD-FORM -->
+    <section id="signup" class="mb-8">
+      <h2 style="font-size:22px">Запишіться / Отримайте програму</h2>
+      <p class="subtitle">Залиште заявку — ми ндішлемо програму PDF та подальші кроки. Конфіденційність гарантуємо.</p>
+
+      <!-- form supports Netlify fallback; includes honeypot for bots -->
+      <form id="leadForm" name="lead" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="card" aria-describedby="formNote">
+        <input type="hidden" name="form-name" value="lead">
+        <p style="display:none"><label>Не заповнюйте це поле: <input name="bot-field"></label></p>
+
+        <div class="row-2" style="margin-bottom:12px">
+          <div>
+            <label for="name">Ім'я *</label>
+            <input id="name" name="name" required placeholder="Ваше ім'я">
+          </div>
+          <div>
+            <label for="email">Email *</label>
+            <input id="email" name="email" type="email" required placeholder="email@domain.com">
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <label for="note">Коротко: ваш запит (опційно)</label>
+          <textarea id="note" name="note" rows="4" placeholder="Питання щодо формату, дати старту або оплати"></textarea>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <label style="display:flex;align-items:center;gap:8px">
+            <input type="checkbox" id="consent" name="consent" required>
+            <span>Погоджуюсь на обробку персональних даних і політику конфіденційності</span>
+          </label>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center">
+          <button class="btn" type="submit" id="submitBtn">Отримати програму</button>
+          <a href="/assets/pdf/syllabus.pdf" class="btn ghost" download id="downloadAfter">Завантажити прямо зараз</a>
+          <div id="formMsg" style="margin-left:auto;color:var(--muted)"></div>
+        </div>
+
+        <p id="formNote" style="color:var(--muted);font-size:13px;margin-top:10px">Ми не спамимо. Після відправки ви отримаєте посилання на PDF & деталі вступу. <a href="/privacy.html">Privacy policy</a>.</p>
+      </form>
+    </section>
+
+    <!-- NEXT STEPS / CONTACT -->
+    <section id="contact" class="mb-8 grid-2">
+      <div class="card">
+        <h3>Потрібна консультація?</h3>
+        <p class="subtitle">Замовте 20-хв career-call — ми розберемо ваш кейс та дамо персональний roadmap.</p>
+        <button class="btn" id="orderCareer">Замовити career-call</button>
+      </div>
+
+      <aside class="card" aria-label="Контакти">
+        <h3>Контакти менеджера</h3>
+        <p style="color:var(--muted)">Email: <a href="mailto:hello@uxuipro.com">hello@uxuipro.com</a><br>Телефон: <a href="tel:+380501234567">+38 050 123 45 67</a></p>
+        <p style="color:var(--muted)">Пн–Пт 09:00–18:00</p>
+      </aside>
+    </section>
+
+  </main>
+
+  <!-- footer -->
+  <footer role="contentinfo">
+    <div class="wrap" style="display:flex;gap:20px;align-items:flex-start;justify-content:space-between">
+      <div>
+        <div class="logo" style="color:#fff">UX/UI Pro</div>
+        <small>Інтенсивний практичний курс • Портфоліо → Працевлаштування</small>
+      </div>
+
+      <div style="display:flex;gap:30px">
+        <div>
+          <h4 style="color:#fff">Навігація</h4>
+          <ul style="list-style:none;padding:0;margin:0;color:#d8f7e9">
+            <li><a href="#overview">Про курс</a></li>
+            <li><a href="#modules">Програма</a></li>
+            <li><a href="#signup">Записатися</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#fff">Юридично</h4>
+          <ul style="list-style:none;padding:0;margin:0;color:#d8f7e9">
+            <li><a href="/privacy.html">Privacy Policy</a></li>
+            <li><a href="/terms.html">Terms</a></li>
+            <li><a href="/refund.html">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile sticky CTA -->
+  <div class="mobile-cta" id="mobileCta" role="region" aria-label="Call to action">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:800">Отримайте програму</div>
+        <div style="font-size:13px">PDF + кроки для вступу</div>
+      </div>
+      <div>
+        <button class="btn" id="mobileSignup">Записатися</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimal JS: behavior, analytics stubs, accessibility -->
+  <script>
+    // analytics stub - safe calls
+    function trackEvent(name, params){ try{ if(window.gtag) gtag('event', name, params||{}); if(window.dataLayer) dataLayer.push({event:name, ...params}); }catch(e){} }
+
+    // FAQ toggles (keyboard accessible)
+    document.querySelectorAll('.faq-item .faq-q').forEach(q=>{
+      q.addEventListener('click', ()=> {
+        const expanded = q.getAttribute('aria-expanded') === 'true';
+        q.setAttribute('aria-expanded', String(!expanded));
+        const a = q.nextElementSibling;
+        if(a) a.hidden = expanded;
+        trackEvent('faq_toggle',{question:q.textContent.trim(),open:!expanded});
+      });
+      q.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' ') { e.preventDefault(); q.click(); } });
+    });
+
+    // Mobile sticky CTA show after scroll
+    const mobileCta = document.getElementById('mobileCta');
+    const showMobile = ()=>{ if(window.scrollY>380) mobileCta.classList.add('show'); else mobileCta.classList.remove('show'); };
+    window.addEventListener('scroll', showMobile);
+
+    // Buttons: open form scroll
+    document.getElementById('openFormBtn').addEventListener('click', ()=>{ document.getElementById('signup').scrollIntoView({behavior:'smooth'}); trackEvent('open_signup_click'); });
+    document.getElementById('topSignupBtn').addEventListener('click', ()=>{ document.getElementById('signup').scrollIntoView({behavior:'smooth'}); trackEvent('hero_cta_click'); });
+    document.getElementById('mobileSignup').addEventListener('click', ()=>{ document.getElementById('signup').scrollIntoView({behavior:'smooth'}); trackEvent('mobile_cta_click'); });
+
+    // Form submit (simulate AJAX; keep serverless-friendly fallback)
+    const leadForm = document.getElementById('leadForm');
+    leadForm && leadForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = 'Надсилаємо…';
+      trackEvent('form_submit_attempt',{form:'lead'});
+      // Simulate server response
+      setTimeout(()=>{
+        btn.disabled = false; btn.textContent = 'Отримати програму';
+        document.getElementById('formMsg').textContent = 'Дякуємо! Посилання на PDF відправлено на email.';
+        trackEvent('form_submit_success',{form:'lead'});
+        // optionally trigger download
+        // location.href = '/assets/pdf/syllabus.pdf';
+      }, 800);
+    });
+
+    // View syllabus online (example opens PDF in new tab)
+    document.getElementById('viewSyllabusBtn').addEventListener('click', function(e){
+      e.preventDefault(); window.open('/assets/pdf/syllabus.pdf','_blank'); trackEvent('syllabus_view');
+    });
+
+    // Order career-call
+    document.getElementById('orderCareer').addEventListener('click', function(){ trackEvent('order_career_call'); alert('Дякуємо! Ми зв\'яжемося з вами для призначення call.'); });
+
+    // GSAP subtle entrance
+    try{
+      if(window.gsap && window.ScrollTrigger){
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from('.card',{y:18,opacity:0,duration:0.7,stagger:0.06,scrollTrigger:{trigger:'#content',start:'top bottom-=80'}});
+      }
+    }catch(e){}
+  </script>
+</body>
+</html>

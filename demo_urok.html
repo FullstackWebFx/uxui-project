@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Демо-урок — Підбірка українських відео з Figma та UX</title>
+  <meta name="description" content="Підбірка українських демо-відео: Figma, UX-основи, швидкий практичний урок 10 хв. Вбудовані відео з YouTube (deferred load), таймкоди, транскрипти та атрибуція." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/focus-trap@6.10.2/dist/focus-trap.umd.js"></script>
+
+  <style>
+    :root{
+      --accent:#10B981;
+      --accent-600:#059669;
+      --muted:#6B7280;
+      --bg:#ffffff;
+      --card:#F8FAFC;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body { height:100%; background:var(--bg); color:#071127; -webkit-font-smoothing:antialiased; }
+    .container{ max-width:1180px; margin:0 auto; padding:36px 20px; }
+
+    h1,h2,h3{ line-height:1.03; }
+    h1{ font-size:34px; font-weight:800; margin-bottom:8px; }
+    h2{ font-size:20px; font-weight:700; margin-bottom:10px; }
+    p.lead{ color:var(--muted); margin-bottom:18px; }
+
+    /* Video grid */
+    .videos { display:grid; grid-template-columns:repeat(1,1fr); gap:20px; }
+    @media(min-width:900px){ .videos { grid-template-columns:repeat(2,1fr); } }
+
+    .video-card {
+      background:linear-gradient(180deg,#ffffff,#fbfdfc);
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 12px 30px rgba(8,12,20,0.06);
+      border:1px solid rgba(11,18,32,0.03);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .video-thumb {
+      position:relative;
+      padding-top:56.25%;
+      background:#eef9f5;
+      cursor:pointer;
+    }
+    .video-thumb img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+    .play-circle {
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:78px; height:78px; border-radius:50%;
+      background:linear-gradient(180deg,var(--accent),var(--accent-600)); display:flex; align-items:center; justify-content:center;
+      box-shadow:0 12px 26px rgba(16,185,129,0.14);
+    }
+    .play-circle svg { width:34px; height:34px; fill:white; }
+
+    .video-body { padding:18px; display:flex; flex-direction:column; gap:10px; }
+    .meta { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .pill { background:#F1FDF6; color:var(--accent-600); padding:6px 10px; border-radius:999px; font-weight:600; font-size:13px; }
+
+    .actions { margin-top:8px; display:flex; gap:10px; flex-wrap:wrap; }
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      min-width:160px; height:46px; padding:0 18px; border-radius:10px; font-weight:700; cursor:pointer; text-decoration:none;
+      border:2px solid transparent;
+    }
+    .btn--primary { background:var(--accent); color:white; box-shadow:0 10px 22px rgba(16,185,129,0.12); border-color:rgba(0,0,0,0.03);}
+    .btn--ghost { background:transparent; color:var(--accent-600); border-color:var(--accent-600); }
+
+    .transcript { font-size:14px; color:var(--muted); background:#fff; border-radius:10px; padding:12px; border:1px solid #EFF5F2; }
+    .transcript pre { white-space:pre-wrap; margin:0; font-family:inherit; font-size:14px; }
+
+    .attribution { font-size:13px; color:var(--muted); margin-top:6px; }
+    .timecodes { font-size:13px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap; }
+
+    /* subtle entrance animations */
+    .reveal { opacity:0; transform:translateY(10px); }
+    .reveal.show { opacity:1; transform:none; transition:all .7s cubic-bezier(.22,.9,.25,1); }
+
+    /* accessibility focus */
+    .video-thumb:focus { outline:3px solid rgba(16,185,129,0.18); outline-offset:6px; }
+
+    /* extras */
+    .section { margin-bottom:34px; }
+  </style>
+</head>
+<body>
+  <main class="container" role="main" aria-labelledby="page-title">
+    <header class="section">
+      <h1 id="page-title">Демо-урок: Підбірка українських відео — Figma та основи UX</h1>
+      <p class="lead">Колекція коротких практичних уроків українською: hands-on Figma, UX-вступи, швидкі прототипи. Відео завантажуються лише при кліку (deferred), під кожним — таймкоди, транскрипт і атрибуція.</p>
+      <div class="meta">
+        <span class="pill">Рекомендовано: 6–12 хв</span>
+        <span class="pill">Рівень: Початківець</span>
+        <a class="btn btn--primary" href="#lead-form" onclick="document.getElementById('lead-form')?.scrollIntoView({behavior:'smooth'})">Отримати програму</a>
+        <a class="btn btn--ghost" href="/assets/checklist_demo.pdf" download>Завантажити чек-ліст</a>
+      </div>
+    </header>
+
+    <!-- VIDEOS GRID -->
+    <section class="videos" aria-label="Список відео демо-уроків">
+      <!-- Video 1: Free Figma Course — Lesson 1 (example ID) -->
+      <article class="video-card reveal" data-reveal>
+        <div class="video-thumb" tabindex="0" role="button" aria-pressed="false"
+             data-src="https://www.youtube.com/embed/GNgmae4EGPM?rel=0&modestbranding=1"
+             aria-label="Запустити відео: БЕЗКОШТОВНИЙ КУРС по FIGMA для початківців — Урок 1">
+          <img src="https://i.ytimg.com/vi/GNgmae4EGPM/maxresdefault.jpg" alt="Прев’ю: БЕЗКОШТОВНИЙ КУРС по FIGMA — Урок 1">
+          <div class="play-circle" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 2v20l18-10L4 2z"/></svg>
+          </div>
+        </div>
+        <div class="video-body">
+          <div>
+            <h3 style="margin:0;font-size:18px;font-weight:700">БЕЗКОШТОВНИЙ КУРС по FIGMA для початківців 2024 — Урок 1</h3>
+            <div class="attribution">Джерело: YouTube — (автор: відкритий урок українською) — <a href="https://www.youtube.com/watch?v=GNgmae4EGPM" target="_blank" rel="noopener">відкрити на YouTube</a></div>
+          </div>
+          <div class="timecodes" aria-hidden="true">
+            <div>0:00 — Вступ</div>
+            <div>1:15 — Інтерфейс Figma</div>
+            <div>4:00 — Перший прототип</div>
+          </div>
+
+          <div class="actions" role="group" aria-label="Дії відео 1">
+            <button class="btn btn--primary" onclick="loadIframe(this.closest('.video-card'))">Відтворити демо</button>
+            <a class="btn btn--ghost" href="/assets/checklist_demo.pdf" download>Завантажити чек-ліст</a>
+          </div>
+
+          <div class="transcript" aria-label="Транскрипт відео 1">
+            <strong>Транскрипт (скорочено):</strong>
+            <pre>00:00 — Привіт! Сьогодні зробимо простий прототип у Figma...
+00:45 — Налаштування фреймів і екранів...
+02:10 — Додаємо кнопки та взаємодії...</pre>
+            <div class="attribution">Якщо субтитри доступні — вмикайте їх у плеєрі на YouTube.</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Video 2: Playlist - Free UI/UX course (example playlist id) -->
+      <article class="video-card reveal" data-reveal>
+        <div class="video-thumb" tabindex="0" role="button" aria-pressed="false"
+             data-src="https://www.youtube.com/embed/?list=PLfRInF5PWqfcL4L9a_8EdwmMjhKFiW6zd&rel=0&modestbranding=1"
+             aria-label="Відтворити плейлист: Безкоштовний курс UI/UX Design українською">
+          <img src="https://i.ytimg.com/vi/GNgmae4EGPM/maxresdefault.jpg" alt="Прев’ю: Плейлист UI/UX українською">
+          <div class="play-circle" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 2v20l18-10L4 2z"/></svg>
+          </div>
+        </div>
+        <div class="video-body">
+          <div>
+            <h3 style="margin:0;font-size:18px;font-weight:700">Плейлист: Безкоштовний курс UI/UX Design українською</h3>
+            <div class="attribution">Плейлист на YouTube — збірка уроків: дизайн-мислення, Figma, workflow — <a href="https://www.youtube.com/playlist?list=PLfRInF5PWqfcL4L9a_8EdwmMjhKFiW6zd" target="_blank" rel="noopener">відкрити на YouTube</a></div>
+          </div>
+          <div class="timecodes">
+            <div>Рекомендація: пройти 1–3 відео як демо.</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn--primary" onclick="loadIframe(this.closest('.video-card'))">Відтворити плейлист</button>
+            <a class="btn btn--ghost" href="#extra-resources">Додаткові матеріали</a>
+          </div>
+
+          <div class="transcript" aria-label="Опис плейлиста">
+            <strong>Про плейлист:</strong>
+            <pre>Це серія, що охоплює: дизайн-мислення, user research, Figma basics, прототипування, презентація кейсів. Ідеально як розгорнуте демо.</pre>
+          </div>
+        </div>
+      </article>
+
+      <!-- Video 3: Figma 101 (short lessons) -->
+      <article class="video-card reveal" data-reveal>
+        <div class="video-thumb" tabindex="0" role="button" aria-pressed="false"
+             data-src="https://www.youtube.com/embed/?list=PLmm7dyLzaSD0mtY157QZ3oYcx_JBsjmtj&rel=0&modestbranding=1"
+             aria-label="Відтворити серію: Figma 101">
+          <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Прев’ю: Figma 101 (серія)">
+          <div class="play-circle" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 2v20l18-10L4 2z"/></svg>
+          </div>
+        </div>
+        <div class="video-body">
+          <h3 style="margin:0;font-size:18px;font-weight:700">Figma Українською — Figma 101 (короткі уроки)</h3>
+          <div class="attribution">Серія технічних lessonів по інтерфейсу, прототипуванню, компонентам — <a href="https://www.youtube.com/playlist?list=PLmm7dyLzaSD0mtY157QZ3oYcx_JBsjmtj" target="_blank" rel="noopener">відкрити на YouTube</a></div>
+
+          <div class="actions">
+            <button class="btn btn--primary" onclick="loadIframe(this.closest('.video-card'))">Відтворити серію</button>
+            <a class="btn btn--ghost" href="#assignment">Приклад ДЗ</a>
+          </div>
+
+          <div class="transcript">
+            <strong>Порада:</strong> дивіться короткі уроки по темам (компоненти, prototyping). Зупиняйте відео і повторюйте кроки у Figma.
+          </div>
+        </div>
+      </article>
+
+      <!-- Video 4: ЩО ТАКЕ UX ДИЗАЙН? (intro) -->
+      <article class="video-card reveal" data-reveal>
+        <div class="video-thumb" tabindex="0" role="button" aria-pressed="false"
+             data-src="https://www.youtube.com/embed/9EA6_iEO0Uc?rel=0&modestbranding=1"
+             aria-label="Відтворити: Що таке UX дизайн — вступний урок">
+          <img src="https://i.ytimg.com/vi/9EA6_iEO0Uc/maxresdefault.jpg" alt="Прев’ю: Що таке UX дизайн?">
+          <div class="play-circle" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2v20l18-10L4 2z"/></svg></div>
+        </div>
+        <div class="video-body">
+          <h3 style="margin:0;font-size:18px;font-weight:700">ЩО ТАКЕ UX ДИЗАЙН? — Вступний урок</h3>
+          <div class="attribution">Короткий теоретичний вступ: що таке UX, чому це важливо — <a href="https://www.youtube.com/watch?v=9EA6_iEO0Uc" target="_blank" rel="noopener">відкрити на YouTube</a></div>
+
+          <div class="timecodes">0:00 — Що таке UX • 2:40 — Процес • 5:10 — Методи</div>
+
+          <div class="actions">
+            <button class="btn btn--primary" onclick="loadIframe(this.closest('.video-card'))">Дивитись</button>
+            <a class="btn btn--ghost" href="#quiz">Квіз</a>
+          </div>
+
+          <div class="transcript">
+            <strong>Основні моменти:</strong>
+            <pre>• UX = User Experience: процес розуміння користувача та створення цінності.
+• Методи: інтерв’ю, тести, прототипи.</pre>
+          </div>
+        </div>
+      </article>
+
+      <!-- Video 5: Дизайн за 10 хв — practical -->
+      <article class="video-card reveal" data-reveal>
+        <div class="video-thumb" tabindex="0" role="button" aria-pressed="false"
+             data-src="https://www.youtube.com/embed/ZXirzwxUe4I?rel=0&modestbranding=1"
+             aria-label="Відтворити: Дизайн сайту за 10 хвилин">
+          <img src="https://i.ytimg.com/vi/ZXirzwxUe4I/maxresdefault.jpg" alt="Прев’ю: Дизайн сайту за 10 хв">
+          <div class="play-circle" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2v20l18-10L4 2z"/></svg></div>
+        </div>
+        <div class="video-body">
+          <h3 style="margin:0;font-size:18px;font-weight:700">Дизайн сайту за 10 хв! — Проектуємо UI/UX у Figma</h3>
+          <div class="attribution">Швидкий практичний урок — ідеально для 5–15 хв демо — <a href="https://www.youtube.com/watch?v=ZXirzwxUe4I" target="_blank" rel="noopener">відкрити на YouTube</a></div>
+
+          <div class="timecodes">0:00 — Ціль • 2:00 — Wireframe • 6:00 — Hi-fi</div>
+
+          <div class="actions">
+            <button class="btn btn--primary" onclick="loadIframe(this.closest('.video-card'))">Відтворити</button>
+            <a class="btn btn--ghost" href="/assets/checklist_demo.pdf" download>Завантажити чек-ліст</a>
+          </div>
+
+          <div class="transcript">
+            <strong>Лайфхак:</strong> розбивайте роботу на 10-хвильні інтервали: 1) концепт, 2) wireframe, 3) прототип.
+          </div>
+        </div>
+      </article>
+
+      <!-- Video 6: Extra playlist / course -->
+      <article class="video-card reveal" data-reveal>
+        <div class="video-thumb" tabindex="0" role="button" aria-pressed="false"
+             data-src="https://www.youtube.com/embed/?list=PLfRInF5PWqfcL4L9a_8EdwmMjhKFiW6zd&rel=0&modestbranding=1"
+             aria-label="Плейлист / додаткові уроки по Figma">
+          <img src="https://i.ytimg.com/vi/GNgmae4EGPM/maxresdefault.jpg" alt="Прев’ю: курс по Figma">
+          <div class="play-circle" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2v20l18-10L4 2z"/></svg></div>
+        </div>
+        <div class="video-body">
+          <h3 style="margin:0;font-size:18px;font-weight:700">Плейлист / курс по Figma — додаткові безкоштовні уроки</h3>
+          <div class="attribution">Колекція tutorial'ів та кейсів — <a href="https://www.youtube.com/playlist?list=PLfRInF5PWqfcL4L9a_8EdwmMjhKFiW6zd" target="_blank" rel="noopener">відкрити на YouTube</a></div>
+
+          <div class="actions">
+            <button class="btn btn--primary" onclick="loadIframe(this.closest('.video-card'))">Відтворити</button>
+            <a class="btn btn--ghost" href="#extras">Матеріали</a>
+          </div>
+
+          <div class="transcript">
+            <strong>Рекомендація:</strong> використовуйте ці уроки як доповнення — підкріплюйте практикою з домашнього завдання.
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Extra resources, tips & hacks -->
+    <section id="extras" class="section reveal" data-reveal>
+      <h2>Лайфхаки та поради для демо-уроку (швидко й ефективно)</h2>
+      <ul style="color:var(--muted);margin-top:10px;line-height:1.5">
+        <li><strong>Дійте по таймкоду:</strong> плануйте 6–12 хв — intro, demo, wrap-up.</li>
+        <li><strong>Повторюйте кроки в Figma:</strong> ставте паузи, повторюйте дії — hands-on залучає.</li>
+        <li><strong>Зробіть чекліст 1 сторінки:</strong> 3 кроки: проблема → 2 екрани → quick test (3 users).</li>
+        <li><strong>Запропонуйте міні-ДЗ:</strong> короткий case (редизайн кнопки/чекаута) + шаблон для завантаження.</li>
+        <li><strong>Записуйте субтитри:</strong> робить контент доступнішим і SEO-дружнім.</li>
+        <li><strong>Embed only on click:</strong> економить трафік і підвищує швидкість сторінки (реалізовано вище).</li>
+      </ul>
+    </section>
+
+    <!-- Lead form (minimal) -->
+    <section id="lead-form" class="section reveal" data-reveal>
+      <h2>Отримати програму та чекліст</h2>
+      <p class="lead">Залиште ім'я та email — дамо доступ до програм, чеклісту та додаткових відео.</p>
+
+      <form onsubmit="handleLead(event)" style="display:grid;grid-template-columns:1fr 280px;gap:12px;align-items:end;max-width:920px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label for="lead-name" class="sr-only">Ім'я</label>
+          <input id="lead-name" name="name" type="text" placeholder="Ваше ім'я" required style="padding:12px;border-radius:10px;border:1px solid #E6E9EE;font-size:15px" />
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label for="lead-email" class="sr-only">Email</label>
+          <input id="lead-email" name="email" type="email" placeholder="email@domain.com" required style="padding:12px;border-radius:10px;border:1px solid #E6E9EE;font-size:15px" />
+        </div>
+
+        <div style="grid-column:1/-1;display:flex;align-items:center;gap:12px">
+          <label style="display:flex;gap:8px;align-items:center">
+            <input id="lead-consent" type="checkbox" required />
+            <span style="color:var(--muted)">Згоден(на) з <a href="/privacy" style="color:var(--accent)">політикою конфіденційності</a></span>
+          </label>
+          <div style="margin-left:auto;display:flex;gap:12px">
+            <button type="submit" class="btn btn--primary">Отримати матеріали</button>
+            <a class="btn btn--ghost" href="/assets/checklist_demo.pdf" download>Завантажити зараз</a>
+          </div>
+        </div>
+
+        <div id="lead-feedback" style="grid-column:1/-1;color:var(--muted);font-size:14px"></div>
+      </form>
+    </section>
+
+    <!-- FAQ short -->
+    <section class="section reveal" data-reveal>
+      <h2>FAQ — швидко</h2>
+      <div style="display:grid;grid-template-columns:repeat(1,1fr);gap:8px;max-width:920px;margin-top:10px">
+        <details>
+          <summary style="font-weight:700">Скільки часу займає демо-урок?</summary>
+          <div style="color:var(--muted);padding:8px 0">6–12 хв — компактний концентрований формат.</div>
+        </details>
+        <details>
+          <summary style="font-weight:700">Чи можна вбудувати всі відео?</summary>
+          <div style="color:var(--muted);padding:8px 0">Так, але ми використовуємо deferred iframe — відео завантажується тільки при кліку. Якщо автор вимкнув embed, покажемо посилання на YouTube.</div>
+        </details>
+        <details>
+          <summary style="font-weight:700">Чи потрібен досвід у Figma?</summary>
+          <div style="color:var(--muted);padding:8px 0">Ні. Рекомендовано починати з уроків Figma 101 та короткого практичного demo.</div>
+        </details>
+      </div>
+    </section>
+
+    <footer style="margin-top:36px;color:var(--muted);font-size:14px">
+      <div>© 2025 — Демонстраційна сторінка. Вбудовані відео — зовнішні ресурси (YouTube). Пам’ятайте перевіряти права embed у автора.</div>
+    </footer>
+  </main>
+
+  <script>
+    // Reveal animation on scroll
+    document.addEventListener('DOMContentLoaded', () => {
+      const reveals = Array.from(document.querySelectorAll('[data-reveal]'));
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      reveals.forEach(r => obs.observe(r));
+    });
+
+    // Deferred iframe loader for any .video-thumb element
+    function loadIframe(card){
+      // card can be .video-card element or element itself
+      const thumb = card.querySelector('.video-thumb');
+      if(!thumb) return;
+      const src = thumb.getAttribute('data-src');
+      if(!src) return;
+      // create responsive iframe wrapper
+      const iframe = document.createElement('iframe');
+      iframe.setAttribute('src', src + '&autoplay=1');
+      iframe.setAttribute('frameborder','0');
+      iframe.setAttribute('allow','autoplay; encrypted-media; picture-in-picture');
+      iframe.setAttribute('allowfullscreen','');
+      iframe.style.position = 'absolute';
+      iframe.style.top = 0;
+      iframe.style.left = 0;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      // replace thumb with iframe
+      thumb.replaceWith(iframe);
+      trackEvent('video_play');
+    }
+
+    // Attach click/keyboard listeners to thumbnails
+    document.addEventListener('click', function(e){
+      const t = e.target.closest('.video-thumb');
+      if(t) { loadIframe(t.closest('.video-card')); }
+    });
+    document.addEventListener('keydown', function(e){
+      if((e.key === 'Enter' || e.key === ' ') && document.activeElement.classList.contains('video-thumb')){
+        e.preventDefault();
+        loadIframe(document.activeElement.closest('.video-card'));
+      }
+    });
+
+    // Simple analytics stub
+    function trackEvent(name){
+      console.log('Analytics event:', name);
+      // Integrate with GA4 or dataLayer here
+      // window.dataLayer = window.dataLayer || []; dataLayer.push({event: name});
+    }
+
+    // Lead form handling (simulation)
+    function handleLead(e){
+      e.preventDefault();
+      const name = document.getElementById('lead-name').value.trim();
+      const email = document.getElementById('lead-email').value.trim();
+      const consent = document.getElementById('lead-consent').checked;
+      const feedback = document.getElementById('lead-feedback');
+      if(!name || !email || !consent){
+        feedback.textContent = 'Будь ласка, заповніть всі поля і підтвердіть згоду.';
+        feedback.style.color = '#ef4444';
+        trackEvent('form_submit_fail');
+        return;
+      }
+      feedback.textContent = 'Дякуємо! Лист з матеріалами буде надіслано на ' + email + '.';
+      feedback.style.color = 'var(--accent-600)';
+      trackEvent('form_submit_success');
+
+      // Simulate download after successful submit
+      setTimeout(()=> {
+        const link = document.createElement('a');
+        link.href = '/assets/checklist_demo.pdf';
+        link.download = 'checklist_demo.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        trackEvent('checklist_download');
+      }, 700);
+    }
+
+    // Accessibility: ensure video-thumb elements are focusable
+    document.querySelectorAll('.video-thumb').forEach(el => {
+      el.setAttribute('tabindex','0');
+    });
+  </script>
+</body>
+</html>
